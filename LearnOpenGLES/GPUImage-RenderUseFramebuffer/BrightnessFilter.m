@@ -1,48 +1,34 @@
 //
-//  RenderView.m
+//  BrightnessFilter.m
 //  GPUImage-RenderUseFramebuffer
 //
-//  Created by SkyRim on 2020/5/23.
+//  Created by SkyRim on 2020/5/24.
 //  Copyright © 2020 SkyRim. All rights reserved.
 //
 
-#import "RenderView.h"
-#import <OpenGLES/ES3/gl.h>
-#import <OpenGLES/EAGL.h>
-#import <OpenGLES/EAGLDrawable.h>
+#import "BrightnessFilter.h"
 
-@interface RenderView ()
+@interface BrightnessFilter ()
 
-@property (nonatomic, assign) GLint program;
+@property (nonatomic, assign) GLuint program;
 @property (nonatomic, assign) GLuint framebuffer;
-@property (nonatomic, assign) GLuint renderbuffer;
-@property (nonatomic, assign) GLuint tex;
+@property (nonatomic, assign) GLuint texture;
+
+@property (nonatomic, assign) CGSize size;
 
 @end
 
-@implementation RenderView
-
-+(Class)layerClass {
-    return CAEAGLLayer.class;
-}
+@implementation BrightnessFilter
 
 - (void)dealloc {
-    if (_framebuffer) {
-        glDeleteFramebuffers(1, &_framebuffer);
-    }
-    
-    if (_renderbuffer) {
-        glDeleteRenderbuffers(1, &_renderbuffer);
-    }
-    
-    if (_program) {
-        glDeleteProgram(_program);
-    }
+    glDeleteProgram(_program);
+    glDeleteFramebuffers(1, &_framebuffer);
+    glDeleteTextures(1, &_texture);
 }
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        [self setupLayer];
+- (instancetype)initWithSize:(CGSize)size {
+    if (self = [super init]) {
+        _size = size;
         [self setupFramebuffer];
         [self setupGLProgram];
     }
@@ -50,21 +36,21 @@
     return self;
 }
 
-- (void)setupLayer {
-    CAEAGLLayer *layer = (CAEAGLLayer *)self.layer;
-    layer.backgroundColor = UIColor.whiteColor.CGColor;
-    layer.opaque = YES;
-}
-
 - (void)setupFramebuffer {
     glGenFramebuffers(1, &_framebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
     
-    glGenRenderbuffers(1, &_renderbuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, _renderbuffer);
+    glGenTextures(1, &_texture);
+    glBindTexture(GL_TEXTURE_2D, _texture);
     
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _renderbuffer);
-    [EAGLContext.currentContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer *)self.layer];
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _size.width, _size.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture, 0);
     
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         NSAssert(NO, @"glCheckFramebufferStatus failed.");
@@ -91,11 +77,12 @@
     "#version 300 es                              \n"
     "precision mediump float;                     \n"
     "uniform sampler2D s_texture;                 \n"
+    "uniform float brightness;                    \n"
     "in vec2 v_texCoord;                          \n"
     "out vec4 fragColor;                          \n"
     "void main()                                  \n"
     "{                                            \n"
-    "   fragColor = texture(s_texture,v_texCoord);\n"
+    "   fragColor = texture(s_texture,v_texCoord) + vec4(brightness);\n"
     "}                                            \n";
     
     //初始化加载片段着色器
@@ -173,11 +160,11 @@
     return 0;
 }
 
-- (void)renderTexture:(GLuint)texture index:(GLenum)index {
+- (void)processTexture:(GLuint)texture index:(GLenum)index completion:(nonnull void (^)(GLuint))completion {
     glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
     
-    glViewport(0, 0, self.bounds.size.width, self.bounds.size.height);
-    glClearColor(0, 1, 1, 1);
+    glViewport(0, 0, self.size.width, self.size.height);
+    glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     
     glUseProgram(self.program);
@@ -200,13 +187,18 @@
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, coords);
     
+    int brightnessUniform = glGetUniformLocation(self.program, "brightness");
+    glUniform1f(brightnessUniform, self.brightness);
+    
     glActiveTexture(index);
     glBindTexture(GL_TEXTURE_2D, texture);
     int textureUniform = glGetUniformLocation(self.program, "s_texture");
     glUniform1i(textureUniform, index - GL_TEXTURE0);
     
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    [EAGLContext.currentContext presentRenderbuffer:_renderbuffer];
+    glFinish();
+
+    completion(_texture);
 }
 
 @end

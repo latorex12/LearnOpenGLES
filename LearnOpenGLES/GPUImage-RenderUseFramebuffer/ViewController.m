@@ -7,12 +7,16 @@
 //
 
 #import "ViewController.h"
-#import "RenderView.h"
 #import <OpenGLES/ES3/gl.h>
+#import "RenderView.h"
+#import "BrightnessFilter.h"
+#import "ColorInverseFilter.h"
 
 @interface ViewController ()
 
 @property (nonatomic, strong) EAGLContext *context;
+@property (nonatomic, strong) BrightnessFilter *filter1;
+@property (nonatomic, strong) ColorInverseFilter *filter2;
 @property (nonatomic, strong) RenderView *renderView;
 @property (nonatomic, assign) GLuint tex;
 
@@ -33,6 +37,8 @@
     
     [self setupContext];
     [self setupRenderView];
+    [self setupFilter1];
+    [self setupFilter2];
     [self render];
 }
 
@@ -49,6 +55,15 @@
 - (void)setupRenderView {
     self.renderView = [[RenderView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.renderView];
+}
+
+- (void)setupFilter1 {
+    self.filter1 = [[BrightnessFilter alloc] initWithSize:self.view.bounds.size];
+    self.filter1.brightness = 0.5;
+}
+
+- (void)setupFilter2 {
+    self.filter2 = [[ColorInverseFilter alloc] initWithSize:self.view.bounds.size];
 }
 
 - (GLuint)getTextureFromImage:(UIImage *)image {
@@ -78,7 +93,11 @@
         self.tex = [self getTextureFromImage:img];
     }
 
-    [self.renderView renderTexture:self.tex index:GL_TEXTURE0];
+    [self.filter1 processTexture:self.tex index:GL_TEXTURE0 completion:^(GLuint texture) {
+        [self.filter2 processTexture:texture index:GL_TEXTURE1 completion:^(GLuint texture) {
+            [self.renderView renderTexture:texture index:GL_TEXTURE2];
+        }];
+    }];
 }
 
 @end

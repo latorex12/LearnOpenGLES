@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2340993B247AB274006FF8BE /* BrightnessFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2340993A247AB274006FF8BE /* BrightnessFilter.m */; };
+		2340993E247AC864006FF8BE /* ColorInverseFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2340993D247AC864006FF8BE /* ColorInverseFilter.m */; };
 		239B999D24571B6200D77015 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 239B999C24571B6200D77015 /* AppDelegate.m */; };
 		239B99A024571B6200D77015 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 239B999F24571B6200D77015 /* SceneDelegate.m */; };
 		239B99A324571B6200D77015 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 239B99A224571B6200D77015 /* ViewController.m */; };
@@ -55,6 +57,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		23409939247AB274006FF8BE /* BrightnessFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BrightnessFilter.h; sourceTree = "<group>"; };
+		2340993A247AB274006FF8BE /* BrightnessFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BrightnessFilter.m; sourceTree = "<group>"; };
+		2340993C247AC864006FF8BE /* ColorInverseFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColorInverseFilter.h; sourceTree = "<group>"; };
+		2340993D247AC864006FF8BE /* ColorInverseFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColorInverseFilter.m; sourceTree = "<group>"; };
 		239B999924571B6200D77015 /* Unit1-DrawTriangle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Unit1-DrawTriangle.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		239B999B24571B6200D77015 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		239B999C24571B6200D77015 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -312,6 +318,10 @@
 				23F904AB24797A8100F0C4E2 /* SceneDelegate.m */,
 				23F904AD24797A8100F0C4E2 /* ViewController.h */,
 				23F904AE24797A8100F0C4E2 /* ViewController.m */,
+				23409939247AB274006FF8BE /* BrightnessFilter.h */,
+				2340993A247AB274006FF8BE /* BrightnessFilter.m */,
+				2340993C247AC864006FF8BE /* ColorInverseFilter.h */,
+				2340993D247AC864006FF8BE /* ColorInverseFilter.m */,
 				23F904BE24797A9D00F0C4E2 /* RenderView.h */,
 				23F904BF24797A9D00F0C4E2 /* RenderView.m */,
 				23F904B024797A8100F0C4E2 /* Main.storyboard */,
@@ -605,10 +615,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2340993E247AC864006FF8BE /* ColorInverseFilter.m in Sources */,
 				23F904AF24797A8100F0C4E2 /* ViewController.m in Sources */,
 				23F904C024797A9D00F0C4E2 /* RenderView.m in Sources */,
 				23F904A924797A8100F0C4E2 /* AppDelegate.m in Sources */,
 				23F904BA24797A8200F0C4E2 /* main.m in Sources */,
+				2340993B247AB274006FF8BE /* BrightnessFilter.m in Sources */,
 				23F904AC24797A8100F0C4E2 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
