@@ -126,7 +126,7 @@
     if (logLen > 0) {
         char *logStr = malloc(sizeof(char) * logLen);
         printf("Link GL Program Failed, error:%s\n", logStr);
-        free(logStr);
+        free(logStrz);
     }
     
     glDeleteProgram(program);
