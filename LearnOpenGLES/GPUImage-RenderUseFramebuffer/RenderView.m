@@ -10,7 +10,6 @@
 #import <OpenGLES/ES3/gl.h>
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/EAGLDrawable.h>
-#import "YFDefineHeader.h"
 
 @interface RenderView ()
 
@@ -208,8 +207,6 @@
     
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     [EAGLContext.currentContext presentRenderbuffer:_renderbuffer];
-    
-    GL_ERRORS(__LINE__);
 }
 
 @end

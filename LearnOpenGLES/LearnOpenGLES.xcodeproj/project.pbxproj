@@ -55,7 +55,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		23409938247AAC0B006FF8BE /* YFDefineHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YFDefineHeader.h; sourceTree = "<group>"; };
 		239B999924571B6200D77015 /* Unit1-DrawTriangle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Unit1-DrawTriangle.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		239B999B24571B6200D77015 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		239B999C24571B6200D77015 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -315,7 +314,6 @@
 				23F904AE24797A8100F0C4E2 /* ViewController.m */,
 				23F904BE24797A9D00F0C4E2 /* RenderView.h */,
 				23F904BF24797A9D00F0C4E2 /* RenderView.m */,
-				23409938247AAC0B006FF8BE /* YFDefineHeader.h */,
 				23F904B024797A8100F0C4E2 /* Main.storyboard */,
 				23F904B324797A8200F0C4E2 /* Assets.xcassets */,
 				23F904B524797A8200F0C4E2 /* LaunchScreen.storyboard */,
